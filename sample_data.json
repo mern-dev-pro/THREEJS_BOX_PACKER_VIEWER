@@ -1,0 +1,61 @@
+{
+  "box": {
+    "height": 1000,
+    "label": "max_box",
+    "length": 1000,
+    "weight": 500,
+    "width": 1000
+  },
+  "items": [
+    {
+      "height": 85,
+      "length": 93,
+      "name": "item_3",
+      "weight": 105,
+      "width": 210,
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    {
+      "height": 27,
+      "length": 200,
+      "name": "item_1",
+      "weight": 67,
+      "width": 300,
+      "x": 210,
+      "y": 0,
+      "z": 0
+    },
+    {
+      "height": 65,
+      "length": 140,
+      "name": "item_4",
+      "weight": 95,
+      "width": 140,
+      "x": 510,
+      "y": 0,
+      "z": 0
+    },
+    {
+      "height": 65,
+      "length": 93,
+      "name": "item_2",
+      "weight": 105,
+      "width": 100,
+      "x": 650,
+      "y": 0,
+      "z": 0
+    },
+    {
+      "height": 24,
+      "length": 75,
+      "name": "item_14",
+      "weight": 30,
+      "width": 150,
+      "x": 750,
+      "y": 0,
+      "z": 0
+    }
+  ]
+}

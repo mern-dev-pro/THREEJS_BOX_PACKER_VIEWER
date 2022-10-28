@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Pallet</title>
+        <!-- Fonts -->
+        
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.145.0/three.min.js"></script>
+    </head>
+    <body>
+        <script type="module">
+            import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.126.1/examples/jsm/controls/OrbitControls.js'
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const stringfiedData = urlParams.get('data');
+            const boxes = JSON.parse(stringfiedData);
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            renderer.shadowMapEnabled = true; //Shadow
+            renderer.shadowMapSoft = true; // Shadow
+            renderer.shadowMapType = THREE.PCFShadowMap; //Shadow
+
+            document.body.appendChild(renderer.domElement);
+
+            // Define Geometry
+            var geometry = new THREE.BoxGeometry(boxes['box']['width'], boxes['box']['length'], boxes['box']['height']);
+            var material = new THREE.MeshPhongMaterial({ // Required For Shadows
+                color: 0xecebec,
+                opacity: 0.4,
+                transparent: true,
+                shininess: 100
+            });
+
+            //Cube
+            var cube = new THREE.Mesh(geometry, material);
+            cube.position.x = boxes['box']['width']/2;
+            cube.position.y = boxes['box']['length']/2;
+            cube.position.z = boxes['box']['height']/2;
+            cube.castShadow = true;
+            cube.receiveShadow = true;
+            scene.add(cube);
+
+            const axesHelper = new THREE.AxesHelper( 10000 );
+            scene.add( axesHelper );
+
+            const items = boxes['items'];
+            items.forEach(item => {
+                console.log('item: ', item);
+                let maxVal = 0xFFFFFF; // 16777215
+                let randomNumber = Math.random() * maxVal;  
+                 // Define Geometry
+                var item_geometry = new THREE.BoxGeometry(item['width'], item['length'], item['height']);
+                var item_material = new THREE.MeshPhongMaterial({ // Required For Shadows
+                    color: randomNumber,
+                    specular: 0x000000,
+                    shininess: 100
+                });
+
+                //Cube
+                var item_cube = new THREE.Mesh(item_geometry, item_material);
+                item_cube.position.x = item['width']/2 + item['x'];
+                item_cube.position.y = item['length']/2 + item['y'];
+                item_cube.position.z = item['height']/2 + item['z'];
+                item_cube.castShadow = true;
+                item_cube.receiveShadow = true;
+                scene.add(item_cube);
+            });
+
+            camera.position.z = 2000;
+            camera.position.y = 2000;
+            camera.position.x = 2000;
+            
+            const controls = new OrbitControls( camera, renderer.domElement );
+            controls.target.set( 0, 0.5, 0 );
+            controls.update();
+            controls.enablePan = false;
+            controls.enableDamping = true;
+            var ambientLight = new THREE.AmbientLight(0x090909);
+            scene.add(ambientLight);
+
+            // Spotlight for specific illumination
+            var spotLight = new THREE.SpotLight(0xAAAAAA);
+            spotLight.position.set(2000, 3000, 3000);
+            spotLight.castShadow = true;
+            spotLight.shadowBias = 0.0001;
+            spotLight.shadowDarkness = 0.2;
+            spotLight.shadowMapWidth = 2048; // Shadow Quality
+            spotLight.shadowMapHeight = 2048; // Shadow Quality
+            scene.add(spotLight);
+
+            // Render Loop
+            function render() {
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+            }
+            render();
+
+            // See also: 
+            // https://threejs.org/docs/index.html#Manual/Introduction/Creating_a_scene
+            // https://threejs.org/docs/api/lights/SpotLight.html
+
+			function animate() {
+				requestAnimationFrame( animate );
+                controls.update();
+				renderer.render( scene, camera );
+			};
+
+			animate();
+	</script>         
+    </body>
+</html>
